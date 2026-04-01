@@ -1,6 +1,8 @@
 # Unified-Multimodal-Brain-Decoding-via-Cross-Subject-Soft-ROI-Fusion
 - `neuro_informed_attn_test.py`: the core neuroscience-informed fMRI encoder, which combines voxel coordinate encoding, multi-atlas soft-ROI priors, and an attention-based aggregation mechanism to transform variable-length fMRI voxel signals into fixed-length fMRI token representations.
 - `perceiver.py`: Perceiver-based resampling module for compressing variable-length input features into fixed latent tokens.
+- `utils.py`: General utility module. It provides common functions such as random seed setup, NaN loss checking, parameter counting, NSD WebDataset downloading, and dataloader construction.
+
 
 ## Training Code Overview
 
@@ -10,4 +12,6 @@
 - `data_nsd.py`: Multi-subject NSD data loading module. It builds the training and validation dataloaders for each subject and organizes the corresponding sample count information. In the current implementation, the training set consists of the train shards plus the val shard, while validation uses the test shards.
 - `optim_and_loss.py`: Module for optimizer setup, loss functions, and training step calculation. It supports AdamW, OneCycleLR/LinearLR, as well as MSE, L1, Huber, Quantile, and Charbonnier losses.
 - `configs.py`: Command-line argument and experiment configuration module. It defines training-related paths, model architecture, fusion mode, attention settings, dropout warmup, and checkpoint strategies, and is also responsible for creating the output directory and saving the configuration file.
-- `utils.py`: General utility module. It provides common functions such as random seed setup, NaN loss checking, parameter counting, NSD WebDataset downloading, and dataloader construction.
+
+
+
