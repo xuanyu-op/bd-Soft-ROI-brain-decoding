@@ -1,6 +1,8 @@
 # Unified-Multimodal-Brain-Decoding-via-Cross-Subject-Soft-ROI-Fusion
 
-Please first install all dependencies listed in requirements.txt. Then, download the required ROI, fMRI, and other related data from the NSD dataset. Before training or inference, make sure that all data paths, model paths, and atlas-related directories are correctly configured. You can download them from https://huggingface.co/datasets/BoltzmachineQ/brain-instruction-tuning/tree/main.
+Please first install all dependencies listed in requirements.txt. Then download the required ROI, fMRI, and other related data from the NSD dataset. Before running training or inference, make sure that all data paths, model paths, and atlas-related directories are correctly configured. The required data can be obtained from the following source: https://huggingface.co/datasets/BoltzmachineQ/brain-instruction-tuning/tree/main.
+
+The softroi and roi files can be downloaded directly from this GitHub repository. Alternatively, you can generate the softroi files yourself by running build_softroi_all_subjects.py.
 
 ## Training
 Stage 1 
