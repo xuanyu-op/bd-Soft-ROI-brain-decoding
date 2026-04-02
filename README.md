@@ -1,4 +1,124 @@
 # Unified-Multimodal-Brain-Decoding-via-Cross-Subject-Soft-ROI-Fusion
+
+Please first install all dependencies listed in requirements.txt. Then, download the required ROI, fMRI, and other related data from the NSD dataset. Before training or inference, make sure that all data paths, model paths, and atlas-related directories are correctly configured. You can download them from https://huggingface.co/datasets/BoltzmachineQ/brain-instruction-tuning/tree/main.
+
+## Training
+Stage 1 
+Run the following command for the first-stage training:
+
+```bash
+python train.py \
+  --model_name  \
+  --data_path  \
+  --clip_model_path  \
+  --model_save_path  \
+  --subjects 1,2,5,7 \
+  --softroi_root  \
+  --roi_root  \
+  --atlas_names  \
+  --feat_dim  \
+  --batch_size  \
+  --num_epochs  \
+  --max_lr  \
+  --recon_loss  \
+  --fusion_mode  \
+  --coord_norm  \
+  --attn_scale  \
+  --attn_norm  \
+  --attn_tau_init  \
+  --no-attn_tau_learnable \
+  --attn_dropout  \
+  --ffn_dropout  \
+  --dropout_warm_epochs  \
+  --no-plot_umap \
+  --ckpt_saving \
+  --no-save_last \
+  --no-save_at_end
+  ```
+Stage 2 Fine-tuning(Strongly recommend)
+
+After completing the first-stage training, further fine-tune the best checkpoint from the previous stage using MSE loss:
+
+```bash
+python train.py \
+  --model_name  \
+  --data_path  \
+  --clip_model_path  \
+  --model_save_path  \
+  --subjects  \
+  --softroi_root  \
+  --roi_root  \
+  --atlas_names  \
+  --feat_dim  \
+  --batch_size  \
+  --num_epochs  \
+  --max_lr  \
+  --fusion_mode  \
+  --coord_norm  \
+  --attn_scale  \
+  --attn_norm  \
+  --attn_tau_init  \
+  --no-attn_tau_learnable \
+  --attn_dropout  \
+  --ffn_dropout  \
+  --dropout_warm_epochs  \
+  --recon_loss mse \
+  --resume the best pth file from last training round \
+  --no-plot_umap \
+  --ckpt_saving \
+  --no-save_last \
+  --no-save_at_end
+  ```
+## Inference
+
+After training, run the following command for inference:
+```bash
+python inference.py \
+  --shikra_path  \
+  --brainroi_path  \
+  --clip_model_path  \
+  --adapter_path  \
+  --feat_dim  \
+  --data_path  \
+  --out_pkl  \
+  --prompt "" \
+  --subj  \
+  --seed  \
+  --prompt_opt_iters  \
+  --optimizer_model_path  \
+  --stageA_precision  \
+  --rank_metric  \
+  --coco_captions_path  \
+  --prompt_pool_size  \
+  --num_new_prompts_per_iter  \
+  --optimizer_temperature  \
+  --optimizer_top_p  \
+  --optimizer_max_new_tokens \
+  --prompt_out  \
+  --eval_image_dir  \
+  --softroi_root  \
+  --roi_root  \
+  --atlas_names  \
+  --fusion_mode  \
+  --num_latents  \
+  --coord_norm  \
+  --attn_scale  \
+  --attn_norm  \
+  --attn_tau_init  \
+  --no-attn_tau_learnable \
+  --attn_dropout  \
+  --ffn_dropout  \
+  --num_beams  \
+  --num_return_sequences  \
+  --max_new_tokens  \
+  --no_repeat_ngram_size  \
+  --length_penalty 
+```
+
+
+# Coding files
+
+
 - `neuro_informed_attn_test.py`: the core neuroscience-informed fMRI encoder, which combines voxel coordinate encoding, multi-atlas soft-ROI priors, and an attention-based aggregation mechanism to transform variable-length fMRI voxel signals into fixed-length fMRI token representations.
 - `perceiver.py`: Perceiver-based resampling module for compressing variable-length input features into fixed latent tokens.
 - `utils.py`: General utility module. It provides common functions such as random seed setup, NaN loss checking, parameter counting, NSD WebDataset downloading, and dataloader construction.
