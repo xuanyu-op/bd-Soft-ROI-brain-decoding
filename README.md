@@ -12,7 +12,7 @@ python train.py \
   --data_path  \
   --clip_model_path  \
   --model_save_path  \
-  --subjects 1,2,5,7 \
+  --subjects  \
   --softroi_root  \
   --roi_root  \
   --atlas_names  \
@@ -63,7 +63,7 @@ python train.py \
   --ffn_dropout  \
   --dropout_warm_epochs  \
   --recon_loss mse \
-  --resume the best pth file from last training round \
+  --resume (the best pth file from last training round) \
   --no-plot_umap \
   --ckpt_saving \
   --no-save_last \
@@ -123,6 +123,20 @@ python inference.py \
 - `perceiver.py`: Perceiver-based resampling module for compressing variable-length input features into fixed latent tokens.
 - `utils.py`: General utility module. It provides common functions such as random seed setup, NaN loss checking, parameter counting, NSD WebDataset downloading, and dataloader construction.
 
+## Auxiliary Code Overview
+
+- `build_softroi_all_subjects.py`: Builds aligned Soft-ROI membership matrices for all subjects from atlas NIfTI files.
+This script automatically detects subject folders, finds the atlases shared across subjects, resamples atlas label maps to each subject’s EPI grid, performs global ROI label alignment, and constructs subject-specific ROI membership matrices R. It supports both hard one-hot assignment and distance-based soft assignment (soft-edt). The outputs include globally aligned ROI label indices, per-subject Soft-ROI matrices, voxel indices, and metadata files, which are used as preprocessing inputs for cross-subject brain decoding.
+
+- `check_voxel_order.py`: Checks whether voxel_indices.npy is fully consistent with the voxel order defined by the subject mask in nsdgeneral.nii.gz.
+This script verifies three aspects: voxel count consistency, voxel set consistency, and voxel order consistency. It can also report mismatched samples and build a permutation mapping between the saved voxel order and the flattened mask order. This utility is mainly used to ensure that voxel indices, ROI matrices, and fMRI features are perfectly aligned before model training or inference.
+
+- `evaluate_captions.py`: Evaluates generated captions using both standard language-generation metrics and CLIP-based semantic similarity metrics.
+Given a .pkl file of generated captions, a reference caption JSON file, and the corresponding image directory, this script computes BLEU-1/2/3/4, ROUGE-L, CIDEr, CLIP Score, and Reference-based CLIP Score. It provides a standalone evaluation pipeline for quantitative comparison of captioning results in brain decoding experiments.
+
+- `view_diffrence.py`: Exports aligned reference–candidate caption pairs into a plain text file for manual inspection.
+This script reads generated captions from a .pkl file and reference captions from a JSON file, matches them by image ID, and writes the results to a tab-separated .txt file in the format:
+image_id<TAB>reference_caption<TAB>generated_caption
 
 ## Training Code Overview
 
