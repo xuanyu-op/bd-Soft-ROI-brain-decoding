@@ -1,8 +1,10 @@
 import os
+import sys
 import json
 import numpy as np
 from tqdm import tqdm
 import torch
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import utils
 from accelerate import Accelerator
 import warnings
@@ -12,6 +14,7 @@ import data_nsd
 import models_nia
 import optim_and_loss
 import trainer
+
 
 
 def main():
